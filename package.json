@@ -9,13 +9,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/goitacademy/parcel-project-template.git"
+    "url": "git+https://alexkabaiev.github.io/goit-js-hw-11.git"
   },
   "keywords": [],
-  "author": "Alexander Repeta <alexander.repeta@gmail.com>",
+  "author": "Alex Kabaiev",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/goitacademy/parcel-project-template/issues"
+    "url": "https://alexkabaiev.github.io/goit-js-hw-11/issues"
   },
   "dependencies": {
     "modern-normalize": "^1.1.0"
