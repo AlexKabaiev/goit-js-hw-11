@@ -40,11 +40,11 @@ async function onSubmitSearchForm(e) {
   const response = await fetchImages(searchQuery, currentPage);
   currentHits = response.hits.length;
 
-  if (response.totalHits > 40) {
-    loadMoreBtn.classList.remove('is-hidden');
-  } else {
-    loadMoreBtn.classList.add('is-hidden');
-  }
+  // if (response.totalHits > 40) {
+  //   loadMoreBtn.classList.remove('is-hidden');
+  // } else {
+  //   loadMoreBtn.classList.add('is-hidden');
+  // }
 
   try {
     if (response.totalHits > 0) {
@@ -69,7 +69,7 @@ async function onSubmitSearchForm(e) {
       Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
-      loadMoreBtn.classList.add('is-hidden');
+      // loadMoreBtn.classList.add('is-hidden');
       endCollectionText.classList.add('is-hidden');
     }
   } catch (error) {
@@ -114,9 +114,51 @@ function renderCardImage(arr) {
 }
 
 // Load more button - function
-loadMoreBtn.addEventListener('click', onClickLoadMoreBtn);
+// loadMoreBtn.addEventListener('click', onClickLoadMoreBtn);
 
-async function onClickLoadMoreBtn() {
+// async function onClickLoadMoreBtn() {
+//   currentPage += 1;
+//   const response = await fetchImages(searchQuery, currentPage);
+//   renderCardImage(response.hits);
+//   lightbox.refresh();
+//   currentHits += response.hits.length;
+
+//   if (currentHits === response.totalHits) {
+//     loadMoreBtn.classList.add('is-hidden');
+//     endCollectionText.classList.remove('is-hidden');
+//   }
+// }
+
+//Infinite scroll
+async function checkPosition() {
+  const height = document.body.offsetHeight;
+  const screenHeight = window.innerHeight;
+  const scrolled = window.scrollY;
+  const threshold = height - screenHeight / 4;
+  const position = scrolled + screenHeight;
+  if (position >= threshold) {
+    await infiniteScroll();
+  }
+}
+
+function throttle(callee, timeout) {
+  let timer = null;
+  return function perform(...args) {
+    if (timer) return;
+    timer = setTimeout(() => {
+      callee(...args);
+      clearTimeout(timer);
+      timer = null;
+    }, timeout);
+  };
+}
+
+(() => {
+  window.addEventListener('scroll', throttle(checkPosition, 250));
+  window.addEventListener('resize', throttle(checkPosition, 250));
+})();
+
+async function infiniteScroll() {
   currentPage += 1;
   const response = await fetchImages(searchQuery, currentPage);
   renderCardImage(response.hits);
@@ -124,7 +166,6 @@ async function onClickLoadMoreBtn() {
   currentHits += response.hits.length;
 
   if (currentHits === response.totalHits) {
-    loadMoreBtn.classList.add('is-hidden');
     endCollectionText.classList.remove('is-hidden');
   }
 }
