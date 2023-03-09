@@ -141,22 +141,22 @@ async function checkPosition() {
   }
 }
 
-function throttle(callee, timeout) {
-  let timer = null;
-  return function perform(...args) {
-    if (timer) return;
-    timer = setTimeout(() => {
-      callee(...args);
-      clearTimeout(timer);
-      timer = null;
-    }, timeout);
-  };
-}
+// function throttle(callee, timeout) {
+//   let timer = null;
+//   return function perform(...args) {
+//     if (timer) return;
+//     timer = setTimeout(() => {
+//       callee(...args);
+//       clearTimeout(timer);
+//       timer = null;
+//     }, timeout);
+//   };
+// }
 
-(() => {
-  window.addEventListener('scroll', throttle(checkPosition, 250));
-  window.addEventListener('resize', throttle(checkPosition, 250));
-})();
+// (() => {
+//   window.addEventListener('scroll', throttle(checkPosition, 250));
+//   window.addEventListener('resize', throttle(checkPosition, 250));
+// })();
 
 async function infiniteScroll() {
   currentPage += 1;
