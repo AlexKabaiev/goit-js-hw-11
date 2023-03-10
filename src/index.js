@@ -37,9 +37,6 @@ async function onSubmitSearchForm(e) {
     return;
   }
 
-  const response = await fetchImages(searchQuery, currentPage);
-  currentHits = response.hits.length;
-
   // if (response.totalHits > 40) {
   //   loadMoreBtn.classList.remove('is-hidden');
   // } else {
@@ -47,6 +44,9 @@ async function onSubmitSearchForm(e) {
   // }
 
   try {
+    const response = await fetchImages(searchQuery, currentPage);
+    currentHits = response.hits.length;
+
     if (response.totalHits > 0) {
       Notify.success(`Hooray! We found ${response.totalHits} images.`);
       gallery.innerHTML = '';
@@ -144,15 +144,18 @@ async function checkPosition() {
   window.addEventListener('scroll', throttle(checkPosition, 250));
   window.addEventListener('resize', throttle(checkPosition, 250));
 
-
 async function infiniteScroll() {
-  currentPage += 1;
-  const response = await fetchImages(searchQuery, currentPage);
-  renderCardImage(response.hits);
-  lightbox.refresh();
-  currentHits += response.hits.length;
+  try {
+    currentPage += 1;
+    const response = await fetchImages(searchQuery, currentPage);
+    renderCardImage(response.hits);
+    lightbox.refresh();
+    currentHits += response.hits.length;
 
-  if (currentHits === response.totalHits) {
-    endCollectionText.classList.remove('is-hidden');
+    if (currentHits === response.totalHits) {
+      endCollectionText.classList.remove('is-hidden');
+    }
+  } catch (error) {
+     console.log(error);
   }
 }
